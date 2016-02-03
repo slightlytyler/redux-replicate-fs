@@ -1,28 +1,22 @@
 import fs from 'fs';
 import { stringify, parse } from 'deserializable';
 
-export default {
-  init(storeKey, store, setReady) {
-    if (!store._fsInitialized) {
-      store._fsInitialized = {};
-    }
+const fsReplicator = keys => () => ({
+  keys,
 
+  init(storeKey, store, setReady) {
     try {
       const serializedState = fs.readFileSync(storeKey, 'utf8');
       const state = serializedState && parse(serializedState) || {};
 
       setReady(true);
-
-      if (store._fsInitialized[storeKey]) {
-        store.setState(state);
-      } else {
-        store._fsInitialized[storeKey] = true;
-        store.setState({ ...state, ...store.getState() });
-      }
+      store.setState(state);
     } catch (error) {
       if (error.code !== 'ENOENT') {
         console.error('Error reading '+storeKey+':', error.stack);
       }
+
+      setReady(true);
     }
   },
 
@@ -35,4 +29,6 @@ export default {
       console.error('Error writing '+storeKey+':', error.stack);
     }
   }
-};
+});
+
+export default fsReplicator;
