@@ -1,6 +1,6 @@
 {
   "name": "redux-replicate-fs",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Replicator for `redux-replicate` designed to persist the state of `redux` stores using Node's `fs`.",
   "main": "./lib/index.js",
   "scripts": {
