@@ -37,6 +37,7 @@
     "webpack": "^1.11.0"
   },
   "dependencies": {
-    "deserializable": "^0.2.2"
+    "deserializable": "^0.2.2",
+    "mkdirp": "^0.5.1"
   }
 }

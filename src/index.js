@@ -1,4 +1,6 @@
 import fs from 'fs';
+import path from 'path';
+import mkdirp from 'mkdirp';
 import { stringify, parse } from 'deserializable';
 
 const fsReplicator = keys => () => ({
@@ -24,9 +26,16 @@ const fsReplicator = keys => () => ({
     try {
       const serializedState = stringify(state, 2);
 
-      fs.writeFileSync(storeKey, serializedState, 'utf8');
+      mkdirp(path.dirname(storeKey), function (err) {
+        if (err) {
+          throw 'Could not create directory'
+        }
+        else {
+          fs.writeFileSync(storeKey, serializedState, 'utf8');
+        }
+      });
     } catch (error) {
-      console.error('Error writing '+storeKey+':', error.stack);
+      console.error('Error writing '+storeKey+':', error.stack || error);
     }
   }
 });
